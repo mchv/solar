@@ -17,6 +17,8 @@ import play.PlayPlugin;
 import play.libs.IO;
 import play.mvc.Http.Request;
 import play.mvc.Http.Response;
+import play.classloading.ApplicationClasses.ApplicationClass;
+import play.exceptions.CompilationException;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -36,6 +38,24 @@ public class SolarPlugin extends PlayPlugin {
                 response.setHeader("Location", "/solar/public/index.html");
                 return true;
             }
+
+            if (request.path.equals("/solar/compile")) {
+                
+                 ApplicationClass applicationClass = Play.classes.getApplicationClass("");
+                 if (applicationClass != null) {
+                    try {
+                        applicationClass.compile();
+                    } catch (CompilationException e) {
+                        //todo
+                    }
+                    
+                 }  
+
+
+                return true;
+            }
+
+
             // -- /bespin/serverconfig.js
             if (request.path.equals("/solar/serverconfig.js")) {
                 return serveConfig(request, response);
