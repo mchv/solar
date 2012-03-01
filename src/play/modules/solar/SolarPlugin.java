@@ -41,12 +41,16 @@ public class SolarPlugin extends PlayPlugin {
 
             if (request.path.equals("/solar/compile")) {
                 
-                 ApplicationClass applicationClass = Play.classes.getApplicationClass("");
+                 ApplicationClass applicationClass = Play.classes.getApplicationClass("controllers.Application");
                  if (applicationClass != null) {
                     try {
+                        applicationClass.refresh();
                         applicationClass.compile();
+                        response.status = 200;
+                        response.out.write("compile".getBytes());
                     } catch (CompilationException e) {
-                        //todo
+                        response.status = 200;
+                        response.out.write("does not compile".getBytes());
                     }
                     
                  }  
