@@ -15,15 +15,32 @@ import play.Play;
 import play.Play.Mode;
 import play.PlayPlugin;
 import play.libs.IO;
+import play.mvc.Router;
 import play.mvc.Http.Request;
 import play.mvc.Http.Response;
 import play.classloading.ApplicationClasses.ApplicationClass;
 import play.exceptions.CompilationException;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
 public class SolarPlugin extends PlayPlugin {
+
+
+
+    @Override
+    public void onRoutesLoaded() {
+        Router.addRoute("GET", "/@solar", "Solar.index");
+        Router.addRoute("GET", "/@solar/list/{root}", "Solar.list");
+        Router.addRoute("GET", "/@solar/load/{path}", "Solar.load");
+        Router.addRoute("GET", "/@solar/save/{path}", "Solar.save");
+        Router.addRoute("GET", "/@solar/compile/{<.*>path}", "Solar.compile");
+    }
+
+    @Override
+    public void onConfigurationRead() {
+        if (!Play.configuration.contains("play.editor")) {
+            Play.configuration.put("play.editor", "/@solar/file/at/%s/%s");
+        }
+    }
+
 
     @Override
     public boolean rawInvocation(Request request, Response response) {
@@ -33,13 +50,13 @@ public class SolarPlugin extends PlayPlugin {
                 return false;
             }
             // -- /bespin
-            if (request.path.equals("/solar") || request.path.equals("/solar/")) {
+            /*if (request.path.equals("/solar") || request.path.equals("/solar/")) {
                 response.status = 302;
                 response.setHeader("Location", "/solar/public/index.html");
                 return true;
-            }
+            }*/
 
-            if (request.path.equals("/solar/compile")) {
+            /*if (request.path.equals("/solar/compile")) {
                 
                  ApplicationClass applicationClass = Play.classes.getApplicationClass("controllers.Application");
                  if (applicationClass != null) {
@@ -57,7 +74,7 @@ public class SolarPlugin extends PlayPlugin {
 
 
                 return true;
-            }
+            }*/
 
 
             // -- /bespin/serverconfig.js
@@ -65,37 +82,38 @@ public class SolarPlugin extends PlayPlugin {
                 return serveConfig(request, response);
             }
             // -- Static files (/bespin/public)
+            /*
             if (request.path.startsWith("/solar/public/")) {
                 String path = request.path.substring("/solar/public".length());
                 return servePublic(request, response, path);
-            }
+            }*/
             // -- /bespin/file/at
-            if (request.path.startsWith("/solar/file/at/")) {
+            /*if (request.path.startsWith("/solar/file/at/")) {
                 File file = Play.getFile(request.path.substring("/solar/file/at".length()));
                 return serveStatic(request, response, file);
-            }
+            }*/
             // -- /bespin/save/
-            if (request.path.startsWith("/solar/save/")) {
+            /*if (request.path.startsWith("/solar/save/")) {
                 File file = Play.getFile(request.path.substring("/solar/save".length()));
                 InputStream content = request.body;
                 save(content, file);
                 return true;
-            }
+            }*/
             // -- bespin/list
-            if (request.path.startsWith("/solar/list/")) {
+            /*if (request.path.startsWith("/solar/list/")) {
                 String root = request.path.substring("/solar/list".length());
                 List<File> fileList = Arrays.asList(Play.getFile(root).listFiles());
                 response.status = 200;
                 response.out.write(serialize(fileList).getBytes("utf-8"));
                 return true;
-            }
+            }*/
             return false;
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void save(InputStream is, File target) {
+    /*public void save(InputStream is, File target) {
         FileOutputStream os;
         try {
             os = new FileOutputStream(target);
@@ -117,9 +135,9 @@ public class SolarPlugin extends PlayPlugin {
             e.printStackTrace();
             return;
         }
-    }
+    }*/
 
-    private boolean servePublic(Request request, Response response, String path) throws Exception {
+    /*private boolean servePublic(Request request, Response response, String path) throws Exception {
         String fullPath = getBespinFolder().getPath() + File.separator + "public" + path;
         boolean binary = false;
         if (path.endsWith(".html") || path.endsWith(".htm")) {
@@ -165,7 +183,7 @@ public class SolarPlugin extends PlayPlugin {
             response.status = 404;
             return false;
         }
-    }
+    }*/
 
     private boolean serveConfig(Request request, Response response) throws Exception {
         response.status = 200;
@@ -176,25 +194,20 @@ public class SolarPlugin extends PlayPlugin {
         return true;
     }
 
-    @Override
-    public void onConfigurationRead() {
-        if (!Play.configuration.contains("play.editor")) {
-            Play.configuration.put("play.editor", "/solar/public/index.html#%s|%s");
-        }
-    }
 
-    private File getBespinFolder() {
+
+    /*private File getBespinFolder() {
         return Play.modules.get("solar").getRealFile();
-    }
+    }*/
 
-    public static final Type listFileType = new TypeToken<List<File>>(){}.getType();
+    /*public static final Type listFileType = new TypeToken<List<File>>(){}.getType();*/
 
-    private static String serialize(List<File> list) {
+    /*private static String serialize(List<File> list) {
         GsonBuilder gson = new GsonBuilder();
         gson.registerTypeAdapter(File.class, new FileSerializer());
         gson.registerTypeAdapter(listFileType, new FileListSerializer());
         String result = gson.create().toJson(list, listFileType);
         return result;
-    }
+    }*/
 
 }

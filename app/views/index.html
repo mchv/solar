@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>Solar</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        
+        <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}" />
+        <script src="@{'/public/js/lib/jquery-1.7.1.min.js'}"></script>
+        <script src="./solar/serverconfig.js"></script>
+        <script src="@{'/public/js/core.js'}"></script>
+        <script src="@{'/public/js/model.js'}"></script>
+        <script src="@{'/public/js/cursor.js'}"></script>
+        <script src="@{'/public/js/history.js'}"></script>
+        <script src="@{'/public/js/clipboard.js'}"></script>
+        <script src="@{'/public/js/editor.js'}"></script>
+        <script src="@{'/public/js/parser.js'}"></script>
+        <script src="@{'/public/js/theme.js'}"></script>
+        <script src="@{'/public/js/preview.js'}"></script>
+
+        <script type="text/javascript">
+            $(function() {     
+                new Textile.Editor('editor');
+            });
+        </script>
+
+    </head>
+    <body>
+<canvas id="editor" width="500" height="300">
+${content}
+</canvas>
+
+</body>
+</html>

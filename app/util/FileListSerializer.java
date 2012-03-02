@@ -1,4 +1,4 @@
-package play.modules.solar;
+package util;
 
 import java.io.File;
 import java.lang.reflect.Type;

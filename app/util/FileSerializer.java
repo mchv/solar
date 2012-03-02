@@ -1,4 +1,4 @@
-package play.modules.solar;
+package util;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -13,6 +13,12 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public class FileSerializer implements JsonSerializer<File> {
+
+    final Type type;
+
+    public FileSerializer(Type type) {
+        this.type = type;
+    }
 
     @Override
     public JsonElement serialize(File file, Type type, JsonSerializationContext context) {
@@ -34,7 +40,7 @@ public class FileSerializer implements JsonSerializer<File> {
 
         // Children (if directory)
         if (file.isDirectory()) {
-            result.add("children", context.serialize(Arrays.asList(file.listFiles()), SolarPlugin.listFileType));
+            result.add("children", context.serialize(Arrays.asList(file.listFiles()), this.type));
         }
 
         return result;
