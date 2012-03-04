@@ -1,5 +1,5 @@
 /** The editor itself **/
-Textile.Editor = Textile.Utils.makeClass({
+Solar.Editor = Solar.Utils.makeClass({
     
     model: null,
     ctx: null,
@@ -28,32 +28,33 @@ Textile.Editor = Textile.Utils.makeClass({
             // Too bad.
             return;
         }
-        this.model = new Textile.Model(this.el.innerHTML, this);
-        this.cursor = new Textile.Cursor(this);
-        this.history = new Textile.History(this);
-        this.clipboard = new Textile.Clipboard(this);
+        this.model = new Solar.Model(this.el.innerHTML, this);
+        this.cursor = new Solar.Cursor(this);
+        this.history = new Solar.History(this);
+        this.clipboard = new Solar.Clipboard(this);
         
         // Gecko detection
         this.gecko = (document.getBoxObjectFor == undefined) ? false : true;
         
         // Events
-        this.el.addEventListener('dblclick', Textile.Utils.bind(this.onDblclick, this), true);
-        window.addEventListener('mousedown', Textile.Utils.bind(this.onMousedown, this), true);
-        window.addEventListener('mouseup', Textile.Utils.bind(this.onMouseup, this), true);
-        window.addEventListener('mousemove', Textile.Utils.bind(this.onMousemove, this), true);
-        window.addEventListener('keypress', Textile.Utils.bind(this.onKeypress, this), true);
-        window.addEventListener('keydown', Textile.Utils.bind(this.onKeydown, this), true);
-        this.el.addEventListener('mousewheel', Textile.Utils.bind(this.onMousewheel, this), true)
+        this.el.addEventListener('dblclick', Solar.Utils.bind(this.onDblclick, this), true);
+        window.addEventListener('mousedown', Solar.Utils.bind(this.onMousedown, this), true);
+        window.addEventListener('mouseup', Solar.Utils.bind(this.onMouseup, this), true);
+        window.addEventListener('mousemove', Solar.Utils.bind(this.onMousemove, this), true);
+        window.addEventListener('keypress', Solar.Utils.bind(this.onKeypress, this), true);
+        window.addEventListener('keydown', Solar.Utils.bind(this.onKeydown, this), true);
+        this.el.addEventListener('mousewheel', Solar.Utils.bind(this.onMousewheel, this), true)
         
         // Gecko hacks
-        this.el.addEventListener('DOMMouseScroll', Textile.Utils.bind(this.onMousewheelGecko, this), true);
+        this.el.addEventListener('DOMMouseScroll', Solar.Utils.bind(this.onMousewheelGecko, this), true);
         
         // First
         this.resize(this.el.width, this.el.height);   
         
+        /* TODO : here this should be linked to the language */
         // Preview
         if(previewEl) {
-            this.preview = new Textile.Preview(this, previewEl);
+            this.preview = new Solar.Textile.Preview(this, previewEl);
         }                 
     },
     
@@ -254,7 +255,7 @@ Textile.Editor = Textile.Utils.makeClass({
         }
         clearTimeout(this.autoscroller);
         if(auto) {
-            this.autoscroller = setTimeout(Textile.Utils.bind(function() {
+            this.autoscroller = setTimeout(Solar.Utils.bind(function() {
                 this.onMousemove(e);
             }, this), 10);
         }                   
@@ -295,6 +296,7 @@ Textile.Editor = Textile.Utils.makeClass({
             this.cursor.show = true;
             var position = this.cursor.getPosition();
             if(e.metaKey || e.ctrlKey) {
+                /* a */
                 if(e.charCode == 97) {
                     e.preventDefault();
                     this.selection = {
@@ -304,21 +306,34 @@ Textile.Editor = Textile.Utils.makeClass({
                     }
                     this.paint();
                 }
+                /* z */
                 if(e.charCode == 122) {
                     this.history.undo();
                 }
+                /* y */
                 if(e.charCode == 121) {
                     this.history.redo();
                 }
+                /* x */
                 if(e.charCode == 120) {
                     this.clipboard.cut();
                 }
+                /* v */
                 if(e.charCode == 118) {
                     this.clipboard.paste();
                 }
+                /* c */
                 if(e.charCode == 99) {
                     this.clipboard.copy();
                 }
+
+                /* s */
+                if(e.charCode == 115) {
+                    this.save();
+                }
+
+                /* TODO f => search,  p => goto anything */
+
                 return;
             }                       
             // CHARS
@@ -369,7 +384,7 @@ Textile.Editor = Textile.Utils.makeClass({
             }   
             // ~~~~ With pos
             var position = this.cursor.getPosition();
-            // ENTER
+            /* ENTER */
             if(e.keyCode == 13) {
                 e.preventDefault();
                 if(this.selection) {
@@ -383,7 +398,7 @@ Textile.Editor = Textile.Utils.makeClass({
                 this.cursor.focus();
                 return;
             }
-            // BACKSPACE
+            /* BACKSPACE */
             if(e.keyCode == 8) {
                 e.preventDefault();
                 if(this.selection) {
@@ -397,7 +412,7 @@ Textile.Editor = Textile.Utils.makeClass({
                 this.cursor.focus();
                 return;
             }
-            // TAB
+            /* TAB */
             if(e.keyCode == 9) {
                 e.preventDefault();
                 if(this.selection) {
@@ -411,7 +426,7 @@ Textile.Editor = Textile.Utils.makeClass({
                 this.cursor.focus();
                 return;
             }
-            // SUPPR 
+            /* SUPPR */ 
             if(e.keyCode == 46) {
                 e.preventDefault();
                 this.model.deleteRight(position);
@@ -445,7 +460,7 @@ Textile.Editor = Textile.Utils.makeClass({
     },
     
     paintBackground: function() {
-        var style = Textile.Theme['PLAIN'];
+        var style = Solar.Theme['PLAIN'];
         if(style && style.background) {
             this.ctx.fillStyle = style.background;
         } else {
@@ -453,11 +468,12 @@ Textile.Editor = Textile.Utils.makeClass({
         }
         this.ctx.fillRect(0, 0, this.width, this.height);
         //
-        var parser = new Textile.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
+        var parser = new Solar.Textile.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
         var token = parser.nextToken();
         var x = 0, y = 1;
         while(token.type != 'EOF') {
-            var style = Textile.Theme[token.type];
+            /* TODO here we should get another*/
+            var style = Solar.Theme[token.type];
             if(style && style.background) {
                 this.ctx.fillStyle = style.background;
                 for(var i=token.startLine-this.first_line; i<=token.endLine-this.first_line; i++) {
@@ -471,7 +487,7 @@ Textile.Editor = Textile.Utils.makeClass({
     
     paintSelection: function() {
         if(this.hasFocus) {
-            var style = Textile.Theme['SELECTION'];
+            var style = Solar.Theme['SELECTION'];
             if(style && style.background) {
                 this.ctx.fillStyle = style.background;
             } else {
@@ -542,12 +558,56 @@ Textile.Editor = Textile.Utils.makeClass({
     },
     
     paintContent: function() {
-        var parser = new Textile.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
+        
+
+        var parser = new Solar.Java.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
+        var x = 0, y = 1;
+        var tokens = parser.tokens();
+        for (var t=0; t<tokens.length; t++) {    
+            var token = tokens[t];
+            if(token.text) {
+                var style = Solar.Java.Theme[token.type];        
+                if(style && style.color) {
+                    this.ctx.fillStyle = style.color;
+                } else {
+                    this.ctx.fillStyle = '#FFF';                            
+                }
+                if(style && style.fontStyle) {
+                    this.ctx.font = style.fontStyle + ' ' + '12px Monaco, Lucida Console, monospace'; 
+                } else {
+                    this.ctx.font = '12px Monaco, Lucida Console, monospace';                         
+                }
+
+                if(token.text.indexOf('\n') > -1 || token.text.indexOf('\r') > -1) {
+                    var lines = token.text.split(/[\n\r]/);
+                    for(var i=0; i<lines.length; i++) {                        
+                        if(token.startLine + i >= y + this.first_line - 1 && token.startLine + i <= this.first_line + this.lines - 1) {
+                            this.ctx.fillText(lines[i], this.gutterWidth + this.paddingLeft + x * this.charWidth, y * this.lineHeight + this.paddingTop - 4);                        
+                            x += lines[i].length;
+                            if(i < lines.length - 1 ) {
+                                x = 0; y++;
+                            }
+                        }
+                    }
+                } else { 
+                    if(token.startLine >= y + this.first_line - 1 && token.startLine <= this.first_line + this.lines - 1) { 
+                        this.ctx.fillText(token.text, this.gutterWidth + this.paddingLeft + x * this.charWidth, y * this.lineHeight + this.paddingTop - 4);                        
+                        if(style && style.underline) {
+                            this.ctx.fillRect(this.gutterWidth + this.paddingLeft + x * this.charWidth, y * this.lineHeight + this.paddingTop - 4 + 1, token.text.length * this.charWidth + 1, 1);
+                        }
+                        x += token.text.length;
+                    }
+                }
+            }
+        }
+
+        /*
+        var parser = new Solar.Textile.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
         var token = parser.nextToken();
         var x = 0, y = 1;
         while(token.type != 'EOF') {
             if(token.text) {
-                var style = Textile.Theme[token.type];        
+                var style = Solar.Textile.Theme[token.type];        
                 if(style && style.color) {
                     this.ctx.fillStyle = style.color;
                 } else {
@@ -581,7 +641,7 @@ Textile.Editor = Textile.Utils.makeClass({
             }
             // Yop
             token = parser.nextToken();
-        }
+        }*/
     },
     
     paintCursor: function() {

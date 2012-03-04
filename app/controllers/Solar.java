@@ -23,7 +23,7 @@ import util.*;
 public class Solar extends Controller {
 
 	public static void index() {
-		String content = "hello world";
+		String content = IO.readContentAsString(Play.getFile("app/controllers/Application.java"));
 		render("index.html", content);
 	}
 

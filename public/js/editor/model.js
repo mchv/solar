@@ -1,5 +1,5 @@
-/** Textile document model **/
-Textile.Model = Textile.Utils.makeClass({
+/** Solar document model **/
+Solar.Model = Solar.Utils.makeClass({
    
    content: '',
    lines: [],

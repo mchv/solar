@@ -1,7 +1,7 @@
-var Textile = {};
+var Solar = {};
 
 /** Some utils **/
-Textile.Utils = {
+Solar.Utils = {
     
     bind: function(func, o) {
         return function() {

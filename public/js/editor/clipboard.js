@@ -1,5 +1,5 @@
 /** Pretty dumb clipboard implementation **/
-Textile.Clipboard = Textile.Utils.makeClass({
+Solar.Clipboard = Solar.Utils.makeClass({
     
     constructor: function(editor) {
         this.editor = editor;
@@ -35,7 +35,7 @@ Textile.Clipboard = Textile.Utils.makeClass({
     
     paste: function() {
         this.clipboard.select();
-        setTimeout(Textile.Utils.bind(function() {
+        setTimeout(Solar.Utils.bind(function() {
             var data = this.clipboard.value;
             if(data) {
                 if(this.editor.selection) {

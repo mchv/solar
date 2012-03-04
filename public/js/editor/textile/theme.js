@@ -1,14 +1,5 @@
-/** Theme **/
-Textile.Theme = {
-    
-    'PLAIN': {
-        background: '#000',
-        color: '#FFF'
-    },
-    
-    'SELECTION': {
-        background: 'rgba(255, 255, 255, .2)'
-    },
+/** Textile Theme **/
+Solar.Textile.Theme = {
     
     'HEADING': {
         background: '#622C10',

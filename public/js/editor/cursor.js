@@ -1,5 +1,5 @@
 /** Cursor **/
-Textile.Cursor = Textile.Utils.makeClass({
+Solar.Cursor = Solar.Utils.makeClass({
    
    line: 1,
    column: 0,
@@ -9,7 +9,7 @@ Textile.Cursor = Textile.Utils.makeClass({
    
    constructor: function(editor) {
         this.editor = editor;
-        setInterval(Textile.Utils.bind(this.toggle, this), 500);
+        setInterval(Solar.Utils.bind(this.toggle, this), 500);
    },
    
    onChange: function(handler) {

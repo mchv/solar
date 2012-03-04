@@ -7,27 +7,31 @@
         <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}" />
         <script src="@{'/public/js/lib/jquery-1.7.1.min.js'}"></script>
         <script src="./solar/serverconfig.js"></script>
-        <script src="@{'/public/js/core.js'}"></script>
-        <script src="@{'/public/js/model.js'}"></script>
-        <script src="@{'/public/js/cursor.js'}"></script>
-        <script src="@{'/public/js/history.js'}"></script>
-        <script src="@{'/public/js/clipboard.js'}"></script>
-        <script src="@{'/public/js/editor.js'}"></script>
-        <script src="@{'/public/js/parser.js'}"></script>
-        <script src="@{'/public/js/theme.js'}"></script>
-        <script src="@{'/public/js/preview.js'}"></script>
+        <script src="@{'/public/js/editor/core.js'}"></script>
+        <script src="@{'/public/js/editor/model.js'}"></script>
+        <script src="@{'/public/js/editor/cursor.js'}"></script>
+        <script src="@{'/public/js/editor/history.js'}"></script>
+        <script src="@{'/public/js/editor/clipboard.js'}"></script>
+        <script src="@{'/public/js/editor/editor.js'}"></script>
+        <script src="@{'/public/js/editor/theme.js'}"></script>
+        <script src="@{'/public/js/editor/parser.js'}"></script>
+
+        <script src="@{'/public/js/editor/textile/parser.js'}"></script>
+        <script src="@{'/public/js/editor/textile/theme.js'}"></script>
+        <script src="@{'/public/js/editor/textile/preview.js'}"></script>
+
+        <script src="@{'/public/js/editor/java/parser.js'}"></script>
+        <script src="@{'/public/js/editor/java/theme.js'}"></script>
 
         <script type="text/javascript">
             $(function() {     
-                new Textile.Editor('editor');
+                new Solar.Editor('editor');
             });
         </script>
 
     </head>
     <body>
-<canvas id="editor" width="500" height="300">
-${content}
-</canvas>
+<canvas id="editor" width="800" height="500">${content}</canvas>
 
 </body>
 </html>

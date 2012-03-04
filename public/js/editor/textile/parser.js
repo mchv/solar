@@ -1,5 +1,8 @@
 /** Textile parser **/
-Textile.Parser = Textile.Utils.makeClass({
+Solar.Textile = {};
+
+
+Solar.Textile.Parser = Solar.Utils.makeClass({
    
    constructor: function(model, from, to) {
        this.model = model;

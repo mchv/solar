@@ -1,14 +1,14 @@
 /** Preview processor **/
-Textile.Preview = Textile.Utils.makeClass({
+Solar.Textile.Preview = Solar.Utils.makeClass({
     
     constructor: function(editor, el) {
         this.editor = editor;
         this.el = (typeof(el) == 'string' ? document.getElementById(el) : el);
         this.pageWidth = $('#doc').width();
-        this.editor.model.onChange(Textile.Utils.bind(this.onChange, this));
-        this.editor.cursor.onChange(Textile.Utils.bind(this.cursorChanged, this));
-        this.editor.onScroll(Textile.Utils.bind(this.onScroll, this));
-        this.editor.onResize(Textile.Utils.bind(this.onResize, this));
+        this.editor.model.onChange(Solar.Utis.bind(this.onChange, this));
+        this.editor.cursor.onChange(Solar.Utils.bind(this.cursorChanged, this));
+        this.editor.onScroll(Solar.Utils.bind(this.onScroll, this));
+        this.editor.onResize(Solar.Utils.bind(this.onResize, this));
         this.render();
     },
 

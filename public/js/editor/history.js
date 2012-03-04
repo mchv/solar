@@ -1,5 +1,5 @@
 /** History for undo/redo **/
-Textile.History = Textile.Utils.makeClass({
+Solar.History = Solar.Utils.makeClass({
    
    commands: null,
    date: 0,
