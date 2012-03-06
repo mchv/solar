@@ -50,16 +50,25 @@ public class Solar extends Controller {
 		IO.write(is, file);
 	}
 
-	public static void compile(String path) {
+	public static void compile() {
+        String source = params.get("source");
 		ApplicationClass applicationClass = Play.classes.getApplicationClass("controllers.Application");
         if (applicationClass != null) {
         	try {
             	applicationClass.refresh();
-               	applicationClass.compile();
-                renderText("compile");
+                /* the magic is here :) */
+               	applicationClass.javaSource = source;
+                applicationClass.compile();
+                boolean compile = true;
+                renderTemplate("compile.json", compile, 0, 0, 0, "");
            	} catch (CompilationException e) {
-            	renderText("does not compile");
-        	}          
+                int errorLine = e.getLineNumber();
+                int srcStart = e.getSourceStart();
+                int srcEnd = e.getSourceEnd();
+                String msg = e.getMessage();
+                boolean compile = false;
+                renderTemplate("compile.json", compile, errorLine, srcStart, srcEnd, msg);
+            }          
     	} 
 	}
 

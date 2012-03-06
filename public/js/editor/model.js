@@ -4,6 +4,7 @@ Solar.Model = Solar.Utils.makeClass({
    content: '',
    lines: [],
    editor: null,
+   error: null,
    
    constructor: function(txt, editor) {
        this.content = txt;
@@ -111,7 +112,7 @@ Solar.Model = Solar.Utils.makeClass({
    },
    
    onChange: function(handler) {
-       this.onChangeHandler = handler;
+      this.onChangeHandler = handler;
    }
     
 });

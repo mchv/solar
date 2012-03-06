@@ -1,0 +1,14 @@
+{
+	"compilation":{
+#{if compile}
+ 	"result":true
+#{/if}
+#{else}
+	"result":false,
+	"errorLine":"${errorLine}",
+	"srcStart":"${srcStart}",
+	"srcEnd":"${srcEnd}"
+#{/else}
+	}
+}
+

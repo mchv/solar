@@ -347,8 +347,25 @@ Solar.Editor = Solar.Utils.makeClass({
                 this.model.insert(position, c);
                 this.cursor.toPosition(position + 1);                         
             }
+            this.compile();
             this.cursor.focus();
         }
+    },
+
+    compile: function() {
+        var toCompile = this.model.content;
+        var model = this.model;
+        $.post("@solar/compile", { "source": toCompile },
+            function(data){
+                    var json = jQuery.parseJSON(data);
+                    var result = json.compilation.result;
+                    if (!(result)) {
+                        model.error = json.compilation;
+                    } else {
+                        model.error = null;
+                    }
+            },
+            "text");
     },
     
     onKeydown: function(e, force) {
@@ -409,6 +426,7 @@ Solar.Editor = Solar.Utils.makeClass({
                     this.model.deleteLeft(position);
                     this.cursor.toPosition(position - 1);
                 }
+                this.compile();
                 this.cursor.focus();
                 return;
             }
@@ -431,6 +449,7 @@ Solar.Editor = Solar.Utils.makeClass({
                 e.preventDefault();
                 this.model.deleteRight(position);
                 this.cursor.toPosition(position);
+                this.compile();
                 this.cursor.focus();
                 return;
             }                 
@@ -457,6 +476,7 @@ Solar.Editor = Solar.Utils.makeClass({
         this.paintContent();
         this.paintScrollbar();
         this.paintCursor();
+        this.paintError();
     },
     
     paintBackground: function() {
@@ -643,7 +663,15 @@ Solar.Editor = Solar.Utils.makeClass({
             token = parser.nextToken();
         }*/
     },
+
     
+    paintError: function() {
+        if (this.model.error) {
+            this.ctx.fillStyle = '#FF0000';
+            this.ctx.fillRect(this.gutterWidth + this.paddingLeft + (this.model.error.srcStart - this.model.lines[this.model.error.errorLine - 1].offset) * this.charWidth, this.paddingTop + ((this.model.error.errorLine - this.first_line + 1) * this.lineHeight), (this.model.error.srcEnd - this.model.error.srcStart + 1) * this.charWidth, 2);   
+        }
+    },
+
     paintCursor: function() {
         if(this.hasFocus && this.cursor.show && !this.selection && this.cursor.isVisible()) {
             this.ctx.fillStyle = '#FFF';
