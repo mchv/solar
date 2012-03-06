@@ -5,6 +5,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         
         <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}" />
+        
+        <link href="@{'/public/css/main.css'}" media="screen" rel="stylesheet" type="text/css" />
+
+        <script src="@{'/public/js/lib/jquery-1.7.1.min.js'}"></script>
         <script src="@{'/public/js/lib/jquery-1.7.1.min.js'}"></script>
         <script src="./solar/serverconfig.js"></script>
         <script src="@{'/public/js/editor/core.js'}"></script>
@@ -31,7 +35,18 @@
 
     </head>
     <body>
-<canvas id="editor" width="800" height="500">${content}</canvas>
-
+        <div id="header">
+                <img class="logo" src="@{'/public/images/Solar.png'}" height="30"></img>
+        </div>
+        <div id="content">
+                <div id="file">
+                        Hello boy 
+                        <ul class="buttons">
+                                <li><a href="" class="button">Save</a></li>
+                                <li><a herf="" class="button">Cancel</a></li>
+                        </ul> 
+                        <canvas id="editor" width="800" height="500">${content}</canvas>
+                </div>
+        </div>
 </body>
 </html>

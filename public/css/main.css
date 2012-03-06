@@ -1,0 +1,67 @@
+#header {
+	background-color:rgb(250, 250, 250);
+	background-image: -moz-linear-gradient(rgb(250, 250, 250), rgb(234, 234, 234));
+	border-bottom: 1px solid rgb(202, 202, 202);
+	box-shadow: 0pt 1px 0pt rgba(255, 255, 255, 0.4), 0pt 0pt 10px rgba(0, 0, 0, 0.1);
+} 
+
+#header .logo {
+	padding-left: 10px;
+	margin-bottom:10px;
+}
+
+.inside {
+	border-left: 1px solid rgb(250, 250, 250);
+	box-shadow: -1px 0pt 0pt rgb(224, 224, 224);
+	padding: 10px;
+}
+
+.buttons {
+	border: 1px solid rgb(221, 221, 221);
+	border-radius: 3px 3px 3px 3px;
+	box-shadow: 0pt 1px 0pt rgb(250, 250, 250), 0pt 1px 0pt rgb(250, 250, 250) inset;
+	list-style: none outside none;
+}
+
+
+
+#content {
+	padding-top: 30px;
+}
+
+#file {
+	padding-left: 20px;
+}
+
+#file ul.buttons {
+	border:none;
+	display: inline-block;
+	margin: 3px;
+}
+
+#file ul.buttons li {
+	list-style-type:none;
+	display: inline-block;
+}
+
+#file a.button {
+	display:block;
+	text-decoration:none;
+	height:30px;
+	line-height: 30px;
+	font-family:Helvetica, arial;
+	font-size:12px;
+	font-weight:bold;
+	color:rgb(51, 51, 51);
+	text-shadow:1px 1px 0pt rgb(255, 255, 255);
+	border:1px solid rgb(212, 212, 212);
+	border-radius: 3px 3px 3px 3px;
+	background-color: rgb(244, 244, 244);
+	background-image: -moz-linear-gradient(rgb(244, 244, 244), rgb(236, 236, 236));
+	padding: 0pt 8px 0pt 8px;
+	margin: 0pt 0pt 0pt 5px;
+}
+
+canvas {
+	display: block;
+}
