@@ -620,11 +620,13 @@ Solar.Editor = Solar.Utils.makeClass({
             if (this.path.match(/\.java$/))
                 return new Solar.Java.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
             else if(this.path == "conf/application.conf")
-                return null;    
+                return new Solar.Default.Parser(this.model, this.first_line, this.first_line + this.lines - 1);  
             else if(this.path == "conf/messages")
-                return null;
+                return new Solar.Default.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
             else if(this.path == "conf/routes")
                 return new Solar.Router.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
+            else
+                return new Solar.Default.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
     },
 
     compile: function() {

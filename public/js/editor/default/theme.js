@@ -1,0 +1,2 @@
+/** Theme **/
+Solar.Default.Theme = {};
