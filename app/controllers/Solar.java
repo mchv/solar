@@ -23,17 +23,21 @@ import util.*;
 public class Solar extends Controller {
 
 	public static void index() {
-		String content = IO.readContentAsString(Play.getFile("app/controllers/Application.java"));
-		render("index.html", content);
+        String path = "";
+        List<File> files = Arrays.asList(Play.getFile(path).listFiles());
+		//String content = IO.readContentAsString(Play.getFile("app/controllers/Application.java"));
+        render("index.html", path, files);
 	}
 
-	public static void list(String root) {
-        List<File> fileList = Arrays.asList(Play.getFile(root).listFiles());
-        try {
+	public static void list(String path) {
+        List<File> files = Arrays.asList(Play.getFile(path).listFiles());
+        render("index.html", path, files);
+
+        /*try {
         	renderText(serialize(fileList).getBytes("utf-8"));
         } catch (UnsupportedEncodingException e) {
         	//do nothing 
-        }
+        }*/
 	}
 
 	public static void load(String path) {

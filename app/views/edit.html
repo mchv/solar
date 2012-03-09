@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>Solar</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        
+        <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}" />
+        
+        <link href="@{'/public/css/main.css'}" media="screen" rel="stylesheet" type="text/css" />
+
+        <script src="@{'/public/js/lib/jquery-1.7.1.min.js'}"></script>
+        <script src="@{'/public/js/lib/jquery-1.7.1.min.js'}"></script>
+        <script src="./solar/serverconfig.js"></script>
+        <script src="@{'/public/js/editor/core.js'}"></script>
+        <script src="@{'/public/js/editor/model.js'}"></script>
+        <script src="@{'/public/js/editor/cursor.js'}"></script>
+        <script src="@{'/public/js/editor/history.js'}"></script>
+        <script src="@{'/public/js/editor/clipboard.js'}"></script>
+        <script src="@{'/public/js/editor/editor.js'}"></script>
+        <script src="@{'/public/js/editor/theme.js'}"></script>
+        <script src="@{'/public/js/editor/parser.js'}"></script>
+
+        <script src="@{'/public/js/editor/textile/parser.js'}"></script>
+        <script src="@{'/public/js/editor/textile/theme.js'}"></script>
+        <script src="@{'/public/js/editor/textile/preview.js'}"></script>
+
+        <script src="@{'/public/js/editor/java/parser.js'}"></script>
+        <script src="@{'/public/js/editor/java/theme.js'}"></script>
+
+        <script type="text/javascript">
+            $(function() {     
+                new Solar.Editor('editor');
+            });
+        </script>
+
+    </head>
+    <body>
+        <div id="header">
+                <img class="logo" src="@{'/public/images/Solar.png'}" height="30"></img>
+        </div>
+        <div id="content">
+                <div id="file">
+                        Hello boy 
+                        <ul class="buttons">
+                                <li><a href="" class="button">Save</a></li>
+                                <li><a herf="" class="button">Cancel</a></li>
+                        </ul> 
+                        <canvas id="editor" width="800" height="500">${content}</canvas>
+                </div>
+        </div>
+</body>
+</html>

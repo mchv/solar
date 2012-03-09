@@ -39,14 +39,81 @@
                 <img class="logo" src="@{'/public/images/Solar.png'}" height="30"></img>
         </div>
         <div id="content">
-                <div id="file">
-                        Hello boy 
-                        <ul class="buttons">
-                                <li><a href="" class="button">Save</a></li>
-                                <li><a herf="" class="button">Cancel</a></li>
-                        </ul> 
-                        <canvas id="editor" width="800" height="500">${content}</canvas>
+
+                %{
+                        segments = path.split("/");
+                        Closure trans = {previous, segment -> (previous.size() > 0) ? previous.add(previous.last()+ '/' + segment) : previous.add(segment)
+                        return previous
+                        };
+                        def list = [];
+                        previous = segments.inject(list,trans);
+                }%
+
+
+                <div id="breadcrumb">
+                        
+
+                         #{list items:segments, as:'segment'}
+                                #{if segment_isLast}
+                                        ${segment}
+                                #{/if}
+                                #{else}
+                                        <a href="@{Solar.list(previous[segment_index-1])}">${segment}</a> &gt;
+                                #{/else}
+                        #{/list}
+                </div>
+                <div id="list">
+                      <table cellpadding="0" cellspacing="0">
+                      <thead>
+                       <tr class="header">
+                        <th></th>
+                        <th>name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        #{ifnot path.isEmpty()}
+                        <tr>
+                                <td> </td>
+                                <td>
+                                #{if previous.size() == 1}
+                                        <a href="@{Solar.index()}">
+                                #{/if}
+                                #{else}
+                                        <a href="@{Solar.list(previous[previous.size()-2])}">
+                                #{/else}
+                                ..</a>
+                                 </td>
+                        </tr>
+                        #{/ifnot}
+                        #{list items:files, as:'file'}
+                                
+                                <tr>
+                                #{if file.isDirectory()}
+                                
+                                %{
+                                  targetPath = path.isEmpty() ? path : path + '/';
+                                }%
+
+                                <td class="icon"> <img alt="directory" height="16" width="16" src="@{'/public/images/folder.png'}"  /> </td>
+
+                                <td class="content"> <a href="@{Solar.list(targetPath + file.getName())}">${file.getName()}</a> </td>
+                        
+                                #{/if}
+                                #{else}
+
+                                <tr>
+                                <td class="icon"> <img alt="file" height="16" width="16" src="@{'/public/images/txt.png'}"/></td> 
+                                <td class="content"> <a href="${'/@solar/edit/'+ path + '/' + file.getName()}">${file.getName()}</a>
+                                </td>
+                                
+                                #{/else}
+                                </tr>
+ 
+                                #{/list}
+                        </tbody>
+                        </table>
                 </div>
         </div>
-</body>
+   </body>
 </html>
