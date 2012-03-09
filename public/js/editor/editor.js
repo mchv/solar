@@ -4,7 +4,6 @@ Solar.Editor = Solar.Utils.makeClass({
     model: null,
     ctx: null,
     el: null,
-    preview: null,
     cursor: null,
     
     lineHeight: 17,
@@ -16,8 +15,11 @@ Solar.Editor = Solar.Utils.makeClass({
     
     hasFocus: false,
     selection: null,
+    path:null,
+    saveURL:null,
+    compileURL:null,
     
-    constructor: function(canvasEl, previewEl) {
+    constructor: function(canvasEl, path, compileURL, saveURL) {
         this.el = (typeof(canvasEl) == 'string' ? document.getElementById(canvasEl) : canvasEl);
         if(!this.el.getContext) {
             // Too bad.
@@ -28,6 +30,9 @@ Solar.Editor = Solar.Utils.makeClass({
             // Too bad.
             return;
         }
+        this.path = path;
+        this.compileURL = compileURL;
+        this.saveURL = saveURL;
         this.model = new Solar.Model(this.el.innerHTML, this);
         this.cursor = new Solar.Cursor(this);
         this.history = new Solar.History(this);
@@ -50,12 +55,7 @@ Solar.Editor = Solar.Utils.makeClass({
         
         // First
         this.resize(this.el.width, this.el.height);   
-        
-        /* TODO : here this should be linked to the language */
-        // Preview
-        if(previewEl) {
-            this.preview = new Solar.Textile.Preview(this, previewEl);
-        }                 
+                         
     },
     
     setContent: function(content) {
@@ -119,14 +119,8 @@ Solar.Editor = Solar.Utils.makeClass({
     onMousedown: function(e) {
         if(e.target == this.el) {
             this.hasFocus = true;
-            if(this.preview) {
-                this.preview.edit();
-            }
         } else {
             this.hasFocus = false;
-            if(this.preview) {
-                this.preview.stopEditing();
-            }
         }
         // Scrollbar click ?
         if(e.pageX > this.getPosition().left + this.width - 20 && e.target == this.el) {
@@ -355,15 +349,28 @@ Solar.Editor = Solar.Utils.makeClass({
     compile: function() {
         var toCompile = this.model.content;
         var model = this.model;
-        $.post("@solar/compile", { "source": toCompile },
+        $.post(this.compileURL, { "source": toCompile },
             function(data){
                     var json = jQuery.parseJSON(data);
                     var result = json.compilation.result;
                     if (!(result)) {
                         model.error = json.compilation;
+                        $('a.save').addClass('inactive');
                     } else {
                         model.error = null;
+                        $('a.save').removeClass('inactive');
                     }
+            },
+            "text");
+    },
+
+    save: function() {
+        var toSave = this.model.content;
+        var path = this.path;
+
+        $.post(this.saveURL, { "path": path, "source": toSave  },
+            function(data){
+                    /*TODO need to warn the user that file has been saved */
             },
             "text");
     },

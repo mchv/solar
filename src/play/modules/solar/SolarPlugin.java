@@ -32,7 +32,7 @@ public class SolarPlugin extends PlayPlugin {
         Router.addRoute("GET", "/@solar/create/{<.*>path}", "Solar.create");
         Router.addRoute("GET", "/@solar/delete/{<.*>path}", "Solar.delete");
         Router.addRoute("GET", "/@solar/edit/{<.*>path}", "Solar.edit");
-        Router.addRoute("GET", "/@solar/save", "Solar.save");
+        Router.addRoute("POST", "/@solar/save", "Solar.save");
         Router.addRoute("POST", "/@solar/compile", "Solar.compile");
     }
 

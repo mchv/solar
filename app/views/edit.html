@@ -10,7 +10,6 @@
 
         <script src="@{'/public/js/lib/jquery-1.7.1.min.js'}"></script>
         <script src="@{'/public/js/lib/jquery-1.7.1.min.js'}"></script>
-        <script src="./solar/serverconfig.js"></script>
         <script src="@{'/public/js/editor/core.js'}"></script>
         <script src="@{'/public/js/editor/model.js'}"></script>
         <script src="@{'/public/js/editor/cursor.js'}"></script>
@@ -29,7 +28,19 @@
 
         <script type="text/javascript">
             $(function() {     
-                new Solar.Editor('editor');
+                var editor = new Solar.Editor('editor', '${path}', '@{Solar.compile}', '@{Solar.save}');
+
+
+                $('a.save').live('click', function(e) {
+                        e.preventDefault();
+                        
+                        if (!$('a.save').hasClass('inactive')) {
+                                editor.save();
+                                $('a.save').addClass('inactive');
+                        }
+
+                });
+
             });
         </script>
 
@@ -40,10 +51,38 @@
         </div>
         <div id="content">
                 <div id="file">
-                        Hello boy 
+
+                         %{
+                                segments = path.split("/");
+                                Closure trans = {previous, segment -> (previous.size() > 0) ? previous.add(previous.last()+ '/' + segment) : previous.add(segment)
+                                return previous
+                                };
+                                def list = [];
+                                previous = segments.inject(list,trans);
+                        }%
+
+                        #{list items:segments, as:'segment'}
+                                #{if segment_isLast}
+                                        ${segment}
+                                #{/if}
+                                #{else}
+                                        ${segment} &gt;
+                                #{/else}
+                        #{/list}
+
+
+                         
                         <ul class="buttons">
-                                <li><a href="" class="button">Save</a></li>
-                                <li><a herf="" class="button">Cancel</a></li>
+                                <li><a href="@{Solar.save}" class="button save inactive">Save</a></li>   
+                                <li>
+                                #{if previous.size() == 1}
+                                        <a href="@{Solar.index()}" class="button">
+                                #{/if}
+                                #{else}
+                                        <a href="@{Solar.list(previous[previous.size()-2])}" class="button">
+                                #{/else}
+                                Close</a>
+                                </li>
                         </ul> 
                         <canvas id="editor" width="800" height="500">${content}</canvas>
                 </div>

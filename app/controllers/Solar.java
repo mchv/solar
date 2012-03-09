@@ -23,15 +23,14 @@ import util.*;
 public class Solar extends Controller {
 
 	public static void index() {
-        String path = "";
-        List<File> files = Arrays.asList(Play.getFile(path).listFiles());
-		//String content = IO.readContentAsString(Play.getFile("app/controllers/Application.java"));
-        render("index.html", path, files);
+                String path = "";
+                List<File> files = Arrays.asList(Play.getFile(path).listFiles());
+                render("index.html", path, files);
 	}
 
 	public static void list(String path) {
-        List<File> files = Arrays.asList(Play.getFile(path).listFiles());
-        render("index.html", path, files);
+                List<File> files = Arrays.asList(Play.getFile(path).listFiles());
+                render("index.html", path, files);
 
         /*try {
         	renderText(serialize(fileList).getBytes("utf-8"));
@@ -40,38 +39,37 @@ public class Solar extends Controller {
         }*/
 	}
 
-	public static void load(String path) {
-		 File file = Play.getFile(path);
-         renderText(IO.readContentAsString(file).replace("\t", "    "));
-
+	public static void edit(String path) {
+                File file = Play.getFile(path);
+                String content = IO.readContentAsString(Play.getFile(path));
+                render("edit.html", content, path);
 	}
 
-	public static void save() {
-		InputStream is = request.body; 
-		String path = params.get("id");		
-
+	public static void save() { 
+		String path = params.get("path");
+                String source = params.get("source");
 		File file = Play.getFile(path);
-		IO.write(is, file);
+		IO.writeContent(source, file);
 	}
 
 	public static void compile() {
-        String source = params.get("source");
+                String source = params.get("source");
 		ApplicationClass applicationClass = Play.classes.getApplicationClass("controllers.Application");
-        if (applicationClass != null) {
-        	try {
-            	applicationClass.refresh();
-                /* the magic is here :) */
-               	applicationClass.javaSource = source;
-                applicationClass.compile();
-                boolean compile = true;
-                renderTemplate("compile.json", compile, 0, 0, 0, "");
-           	} catch (CompilationException e) {
-                int errorLine = e.getLineNumber();
-                int srcStart = e.getSourceStart();
-                int srcEnd = e.getSourceEnd();
-                String msg = e.getMessage();
-                boolean compile = false;
-                renderTemplate("compile.json", compile, errorLine, srcStart, srcEnd, msg);
+                if (applicationClass != null) {
+        	       try {
+            	        applicationClass.refresh();
+                        /* the magic is here :) */
+               	        applicationClass.javaSource = source;
+                        applicationClass.compile();
+                        boolean compile = true;
+                        renderTemplate("compile.json", compile, 0, 0, 0, "");
+           	        } catch (CompilationException e) {
+                          int errorLine = e.getLineNumber();
+                          int srcStart = e.getSourceStart();
+                          int srcEnd = e.getSourceEnd();
+                          String msg = e.getMessage();
+                          boolean compile = false;
+                        renderTemplate("compile.json", compile, errorLine, srcStart, srcEnd, msg);
             }          
     	} 
 	}
