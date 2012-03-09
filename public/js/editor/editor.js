@@ -345,35 +345,6 @@ Solar.Editor = Solar.Utils.makeClass({
             this.cursor.focus();
         }
     },
-
-    compile: function() {
-        var toCompile = this.model.content;
-        var model = this.model;
-        $.post(this.compileURL, { "source": toCompile },
-            function(data){
-                    var json = jQuery.parseJSON(data);
-                    var result = json.compilation.result;
-                    if (!(result)) {
-                        model.error = json.compilation;
-                        $('a.save').addClass('inactive');
-                    } else {
-                        model.error = null;
-                        $('a.save').removeClass('inactive');
-                    }
-            },
-            "text");
-    },
-
-    save: function() {
-        var toSave = this.model.content;
-        var path = this.path;
-
-        $.post(this.saveURL, { "path": path, "source": toSave  },
-            function(data){
-                    /*TODO need to warn the user that file has been saved */
-            },
-            "text");
-    },
     
     onKeydown: function(e, force) {
         if(this.hasFocus && (!this.gecko || force)) {
@@ -494,22 +465,6 @@ Solar.Editor = Solar.Utils.makeClass({
             this.ctx.fillStyle = '#000';            
         }
         this.ctx.fillRect(0, 0, this.width, this.height);
-        //
-        var parser = new Solar.Textile.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
-        var token = parser.nextToken();
-        var x = 0, y = 1;
-        while(token.type != 'EOF') {
-            /* TODO here we should get another*/
-            var style = Solar.Theme[token.type];
-            if(style && style.background) {
-                this.ctx.fillStyle = style.background;
-                for(var i=token.startLine-this.first_line; i<=token.endLine-this.first_line; i++) {
-                    this.ctx.fillRect(this.gutterWidth + this.paddingLeft, (i) * this.lineHeight + this.paddingTop, this.charWidth * (this.lineWidth-1), this.lineHeight);
-                }
-            }          
-            // Yop
-            token = parser.nextToken();
-        }
     },
     
     paintSelection: function() {
@@ -587,13 +542,13 @@ Solar.Editor = Solar.Utils.makeClass({
     paintContent: function() {
         
 
-        var parser = new Solar.Java.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
+        var parser = this.getParser();
         var x = 0, y = 1;
         var tokens = parser.tokens();
         for (var t=0; t<tokens.length; t++) {    
             var token = tokens[t];
             if(token.text) {
-                var style = Solar.Java.Theme[token.type];        
+                var style = parser.theme[token.type];        
                 if(style && style.color) {
                     this.ctx.fillStyle = style.color;
                 } else {
@@ -627,48 +582,6 @@ Solar.Editor = Solar.Utils.makeClass({
                 }
             }
         }
-
-        /*
-        var parser = new Solar.Textile.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
-        var token = parser.nextToken();
-        var x = 0, y = 1;
-        while(token.type != 'EOF') {
-            if(token.text) {
-                var style = Solar.Textile.Theme[token.type];        
-                if(style && style.color) {
-                    this.ctx.fillStyle = style.color;
-                } else {
-                    this.ctx.fillStyle = '#FFF';                            
-                }
-                if(style && style.fontStyle) {
-                    this.ctx.font = style.fontStyle + ' ' + '12px Monaco, Lucida Console, monospace'; 
-                } else {
-                    this.ctx.font = '12px Monaco, Lucida Console, monospace';                         
-                }
-                if(token.text.indexOf('\n') > -1 || token.text.indexOf('\r') > -1) {
-                    var lines = token.text.split(/[\n\r]/);
-                    for(var i=0; i<lines.length; i++) {
-                        if(token.startLine + i >= y + this.first_line - 1 && token.startLine + i <= this.first_line + this.lines - 1) {
-                            this.ctx.fillText(lines[i], this.gutterWidth + this.paddingLeft + x * this.charWidth, y * this.lineHeight + this.paddingTop - 4);                        
-                            x += lines[i].length;
-                            if(i < lines.length - 1 ) {
-                                x = 0; y++;
-                            }
-                        }
-                    }
-                } else {
-                    if(token.startLine >= y + this.first_line - 1 && token.startLine <= this.first_line + this.lines - 1) {      
-                        this.ctx.fillText(token.text, this.gutterWidth + this.paddingLeft + x * this.charWidth, y * this.lineHeight + this.paddingTop - 4);                        
-                        if(style && style.underline) {
-                            this.ctx.fillRect(this.gutterWidth + this.paddingLeft + x * this.charWidth, y * this.lineHeight + this.paddingTop - 4 + 1, token.text.length * this.charWidth + 1, 1);
-                        }
-                        x += token.text.length;
-                    }
-                }
-            }
-            // Yop
-            token = parser.nextToken();
-        }*/
     },
 
     
@@ -700,6 +613,49 @@ Solar.Editor = Solar.Utils.makeClass({
             this.ctx.lineTo(this.width - 10, this.paddingTop + o + bar);
             this.ctx.stroke();
         }
+    },
+
+
+    getParser: function() {
+            if (this.path.match(/\.java$/))
+                return new Solar.Java.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
+            else if(this.path == "conf/application.conf")
+                return null;    
+            else if(this.path == "conf/messages")
+                return null;
+            else if(this.path == "conf/routes")
+                return new Solar.Router.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
+    },
+
+    compile: function() {
+        var toCompile = this.model.content;
+        var model = this.model;
+        var path = this.path;
+
+        $.post(this.compileURL, { "path":path, "source": toCompile },
+            function(data){
+                    var json = jQuery.parseJSON(data);
+                    var result = json.compilation.result;
+                    if (!(result)) {
+                        model.error = json.compilation;
+                        $('a.save').addClass('inactive');
+                    } else {
+                        model.error = null;
+                        $('a.save').removeClass('inactive');
+                    }
+            },
+            "text");
+    },
+
+    save: function() {
+        var toSave = this.model.content;
+        var path = this.path;
+
+        $.post(this.saveURL, { "path": path, "source": toSave  },
+            function(data){
+                    /*TODO need to warn the user that file has been saved */
+            },
+            "text");
     }
     
 });

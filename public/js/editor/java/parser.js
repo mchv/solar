@@ -86,6 +86,8 @@ break,continue,do,else,for,if,return,while"];
 Solar.Java.Parser = function (model, from, to) {
     this.base = Solar.Parser;
     this.base(model, from, to);
+
+    this.theme = Solar.Java.Theme;
 };
 
 Solar.Java.Parser.prototype = new Solar.Parser;
