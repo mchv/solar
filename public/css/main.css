@@ -58,6 +58,39 @@ a {
 	font-size:13px;
 }
 
+
+#actions ul.buttons {
+	border:none;
+	display: inline-block;
+	margin: 3px;
+	padding:0px;
+}
+
+#actions ul.buttons li {
+	list-style-type:none;
+	display: inline-block;
+	margin:1px;
+	padding:0px;
+}
+
+#actions a.button {
+	display:block;
+	cursor:default;
+	text-decoration:none;
+	height:30px;
+	line-height: 30px;
+	font-family:Helvetica, arial;
+	font-size:12px;
+	font-weight:bold;
+	text-shadow:1px 1px 0pt rgb(255, 255, 255);
+	border:1px solid rgb(212, 212, 212);
+	border-radius: 3px 3px 3px 3px;
+	background-color: rgb(244, 244, 244);
+	background-image: -moz-linear-gradient(rgb(244, 244, 244), rgb(236, 236, 236));
+	padding: 0pt 2px 0pt 2px;
+	margin: 0pt 0pt 0pt 2px;
+}
+
 #list {
 	padding-left: 20px;
 	transition:linear .1s;
@@ -69,7 +102,7 @@ a {
 	background:none repeat scroll 0% 0% rgb(238, 238, 238);
 	border-radius:3px 3px 3px 3px;
 	padding:3px;
-	margin-bottom:30px;
+	margin-bottom:5px;
 	width: 920px;
 	margin-right: 100px
 	;

@@ -3,6 +3,7 @@ package controllers;
 import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Arrays;
 
@@ -38,6 +39,19 @@ public class Solar extends Controller {
                 String content = IO.readContentAsString(Play.getFile(path));
                 render("edit.html", content, path);
 	}
+
+        public static void create(String path) {
+                File file = Play.getFile(path);
+                boolean result = false;
+                try {
+                     file.createNewFile();
+                     result = true;
+                } catch (IOException e) {
+                    /* TODO we should log something*/
+                }
+                renderTemplate("creation.json", result);
+                
+        } 
 
 	public static void save() { 
 		String path = params.get("path");
