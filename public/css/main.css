@@ -1,3 +1,16 @@
+#body {
+	font-family:Helvetica, arial;
+	font-size:12px;
+}
+
+a {
+	color:rgb(51, 51, 51);
+	text-decoration: none;
+	font-family:Helvetica, arial;
+	font-size:12px;
+}
+
+
 #header {
 	background-color:rgb(250, 250, 250);
 	background-image: -moz-linear-gradient(rgb(250, 250, 250), rgb(234, 234, 234));
@@ -27,6 +40,79 @@
 
 #content {
 	padding-top: 30px;
+	margin: 0pt auto;
+	width: 920px;
+}
+
+
+#breadcrumb a{
+	padding-bottom:10px;
+	font-family:Helvetica, arial;
+	font-size:13px;
+	font-weight:bold;
+}
+
+#breadcrumb {
+	padding-bottom:10px;
+	font-family:Helvetica, arial;
+	font-size:13px;
+}
+
+#list {
+	padding-left: 20px;
+	transition:linear .1s;
+	-moz-transition: linear .1s;
+	-webkit-transition: linear .1s;
+	-o-transition: linear .1s;
+
+	float:left;
+	background:none repeat scroll 0% 0% rgb(238, 238, 238);
+	border-radius:3px 3px 3px 3px;
+	padding:3px;
+	margin-bottom:30px;
+	width: 920px;
+	margin-right: 100px
+	;
+}
+
+#list table {
+	border: 1px solid rgb(202, 202, 202);
+	border-radius: 3px 3px 3px 3px;
+	margin: 0pt;
+	width: 100%;
+}
+
+#list tr.header{
+	margin: 0pt;
+	padding: 0pt;
+	border:0pt none;
+}
+
+#list th {
+	text-align: left;
+	font-weight: bold;
+	font-family:Helvetica, arial;
+	font-size:12px;
+	padding: 6px 3px;
+	color: rgb(85, 85, 85);
+	text-shadow: 0pt 1px 0pt rgb(255, 255, 255);
+	border-bottom: 1px solid rgb(216, 216, 216);
+	background-color: rgb(250, 250, 250);
+	background-image:-moz-linear-gradient(rgb(250, 250, 250), rgb(234, 234, 234));
+}
+
+#list td {
+	background:none repeat scroll 0% 0% rgb(248, 248, 248);
+	border-bottom:1px solid rgb(238, 238, 238);
+	padding:7px 3px;
+	color:rgb(72, 72, 72);
+	vertical-align:middle;
+}
+
+#list td.icon {
+	width: 17px;
+	padding-right:2px;
+	padding-left:10px;
 }
 
 #file {
