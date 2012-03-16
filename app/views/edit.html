@@ -82,10 +82,10 @@
                                 <li><a href="@{Solar.save}" class="button save inactive">Save</a></li>   
                                 <li>
                                 #{if previous.size() == 1}
-                                        <a href="@{Solar.index()}" class="button">
+                                        <a href="@{Solar.index()}" class="close button">
                                 #{/if}
                                 #{else}
-                                        <a href="@{Solar.list(previous[previous.size()-2])}" class="button">
+                                        <a href="@{Solar.list(previous[previous.size()-2])}" class="close button">
                                 #{/else}
                                 Close</a>
                                 </li>

@@ -323,8 +323,16 @@ Solar.Editor = Solar.Utils.makeClass({
 
                 /* s */
                 if(e.charCode == 115) {
+                    e.preventDefault();
                     this.save();
                 }
+
+                /* w */
+                if(e.charCode == 119) {
+                    e.preventDefault();
+                    this.close();
+                }
+
 
                 /* TODO f => search,  p => goto anything */
 
@@ -391,6 +399,7 @@ Solar.Editor = Solar.Utils.makeClass({
                     this.cursor.toPosition(position+1);                                
                 }
                 this.cursor.focus();
+                this.compile();
                 return;
             }
             /* BACKSPACE */
@@ -419,6 +428,7 @@ Solar.Editor = Solar.Utils.makeClass({
                     this.model.insert(position, '    ');
                     this.cursor.toPosition(position + 4);                            
                 }
+                this.compile();
                 this.cursor.focus();
                 return;
             }
@@ -617,16 +627,17 @@ Solar.Editor = Solar.Utils.makeClass({
 
 
     getParser: function() {
+            var end_line = this.first_line + this.lines - 1;
             if (this.path.match(/\.java$/))
-                return new Solar.Java.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
+                return new Solar.Java.Parser(this.model, this.first_line, end_line);
             else if(this.path == "conf/application.conf")
-                return new Solar.Default.Parser(this.model, this.first_line, this.first_line + this.lines - 1);  
+                return new Solar.Default.Parser(this.model, this.first_line, end_line);  
             else if(this.path == "conf/messages")
-                return new Solar.Default.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
+                return new Solar.Default.Parser(this.model, this.first_line, end_line);
             else if(this.path == "conf/routes")
-                return new Solar.Router.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
+                return new Solar.Router.Parser(this.model, this.first_line, end_line);
             else
-                return new Solar.Default.Parser(this.model, this.first_line, this.first_line + this.lines - 1);
+                return new Solar.Default.Parser(this.model, this.first_line, end_line);
     },
 
     compile: function() {
@@ -655,9 +666,15 @@ Solar.Editor = Solar.Utils.makeClass({
 
         $.post(this.saveURL, { "path": path, "source": toSave  },
             function(data){
+                    $('a.save').addClass('inactive');
                     /*TODO need to warn the user that file has been saved */
             },
             "text");
+    },
+
+    close: function() {
+        var closeLink = $('a.close').attr('href');
+        window.location = closeLink;
     }
     
 });
