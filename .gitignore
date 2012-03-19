@@ -1,0 +1,11 @@
+# General temp files
+.DS_Store
+*.pyc
+
+# Files related to Play build or usage
+dist
+
+# IDE and editors
+eclipse
+.classpath
+.project
