@@ -10,7 +10,7 @@ TODO
 
 ## Changelog
 
-[0.1 Release](./documentation/changelog/0.1-release.textile) 
+[0.1 Release](http://github.com/mchv/solar/tree/master/documentation/changelog/0.1-release.textile) 
 
 ## Bug tracker
 
