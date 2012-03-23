@@ -1,0 +1,22 @@
+h1. Solar 0.1 Changelog 
+
+This is the first version of Solar and this is currently only an experiment.
+The following features have been implemented
+
+h2. Files navigation  
+
+Ability to navigate in the application files, with the ability to edit any files and create new ones.
+
+!../images/0.1-release-navigator.png!
+
+h2. Java file edition
+
+Ability to edit Java files with syntax highlighting and live compilation during the edition.
+
+!../images/0.1-release-java_editor.png!
+
+h2. Router configuration file edition
+
+Ability to edit the router configuration with syntax highlighting. 
+
+!../images/0.1-release-route_editor.png!
