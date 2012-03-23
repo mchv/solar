@@ -17,4 +17,4 @@ At application start time, you should see this message:
 
 bc. 00:21:45,192 INFO  ~ Module solar is available (.../play/modules/solar)
 
-Now open solar in your browser at http://localhost:9000/solar
+Now open solar in your browser at http://localhost:9000/@solar
