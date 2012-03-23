@@ -1,6 +1,6 @@
 #Solar
 
-!http://github.com/mchv/solar/raw/master/documentation/images/logo.png
+![logo](http://github.com/mchv/solar/raw/master/documentation/images/logo.png)
 
 Solar is a simple [play!](http://www.playframework.org/) module to develop applications directly in your browser.
 
