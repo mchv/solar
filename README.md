@@ -1,9 +1,8 @@
-#Solar
+#
 
 ![logo](http://github.com/mchv/solar/raw/master/documentation/images/logo.png)
 
 Solar is a simple [play!](http://www.playframework.org/) module to develop applications directly in your browser.
-
 
 ## Features
 
@@ -39,3 +38,9 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+
+[alt=center] {
+    display: block;
+    margin: auto;
+}
