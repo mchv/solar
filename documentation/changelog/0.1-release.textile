@@ -7,8 +7,7 @@ h2. Files navigation
 
 Ability to navigate in the application files, with the ability to edit any files and create new ones.
 
-!http://github.com/mchv/solar/raw/master/documentation/images/0.1-release-navigator.png
-.png!
+!http://github.com/mchv/solar/raw/master/documentation/images/0.1-release-navigator.png!
 
 h2. Java files edition
 
