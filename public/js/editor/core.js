@@ -11,7 +11,6 @@ Solar.Utils = {
     
     makeClass: function(methods) {
         var fn = function(args) {
-            if(!args) {
             if(args == undefined) {
                 args = {};
             }
