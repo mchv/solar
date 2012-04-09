@@ -1,5 +1,13 @@
 var Solar = {};
 
+
+/** some useful monkey patching **/
+
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+
+
 /** Some utils **/
 Solar.Utils = {
     
