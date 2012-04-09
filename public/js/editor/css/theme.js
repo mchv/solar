@@ -5,6 +5,10 @@ Solar.Css.Theme = {
    		color: '#DE6112'
     },
 
+    'INTEGER': {
+        color: '#AA3612'
+    },
+
     'LT_PAREN': {
         color: '#8BBBE1'
     },
