@@ -33,6 +33,7 @@ Solar.Editor = Solar.Utils.makeClass({
         this.path = path;
         this.compileURL = compileURL;
         this.saveURL = saveURL;
+
         this.model = new Solar.Model(this.el.innerHTML, this);
         this.cursor = new Solar.Cursor(this);
         this.history = new Solar.History(this);
@@ -636,6 +637,8 @@ Solar.Editor = Solar.Utils.makeClass({
                 return new Solar.Default.Parser(this.model, this.first_line, end_line);
             else if(this.path == "conf/routes")
                 return new Solar.Router.Parser(this.model, this.first_line, end_line);
+            if (this.path.endsWith(".css"))
+                return new Solar.Css.Parser(this.model, this.first_line, end_line);
             else
                 return new Solar.Default.Parser(this.model, this.first_line, end_line);
     },
