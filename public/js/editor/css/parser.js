@@ -19,6 +19,7 @@ Solar.Css.Parser = function (model, from, to) {
     this.base(model, from, to);
 
     this.theme = Solar.Css.Theme;
+    this.help = Solar.Css.Help;
 };
 
 Solar.Css.Parser.prototype = new Solar.Parser;
