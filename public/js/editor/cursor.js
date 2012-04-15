@@ -58,8 +58,8 @@ Solar.Cursor = Solar.Utils.makeClass({
         this._notify('now');        
    },
    
-   lineDown: function() {
-       if(this.editor.selection) {
+   lineDown: function(keyboardSelect) {
+       if(!keyboardSelect && this.editor.selection.defined) {
            this.toPosition(this.editor.selection.to);
            this.editor.selection.empty();
        }
@@ -70,8 +70,8 @@ Solar.Cursor = Solar.Utils.makeClass({
        this.bound();     
    },
    
-   lineUp: function() {
-       if(this.editor.selection) {
+   lineUp: function(keyboardSelect) {
+       if(!keyboardSelect && this.editor.selection.defined) {
            this.toPosition(this.editor.selection.from);
            this.editor.selection.empty();
        }
@@ -82,8 +82,8 @@ Solar.Cursor = Solar.Utils.makeClass({
        this.bound();     
    },
    
-   left: function() {
-       if(this.editor.selection) {
+   left: function(keyboardSelect) {
+       if(!keyboardSelect && this.editor.selection.defined) {
            this.toPosition(this.editor.selection.from);
            this.editor.selection.empty();
        } else {
@@ -93,7 +93,7 @@ Solar.Cursor = Solar.Utils.makeClass({
    },
    
    right: function(keyboardSelect) {
-       if(!keyboardSelect && this.editor.selection) {
+       if(!keyboardSelect && this.editor.selection.defined) {
            this.toPosition(this.editor.selection.to);
            this.editor.selection.empty();
        } else {

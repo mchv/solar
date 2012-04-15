@@ -323,6 +323,52 @@ Solar.Editor = Solar.Utils.makeClass({
     onKeydown: function(e, force) {
         if(this.hasFocus && (!this.gecko || force)) {
             if(e.metaKey || e.ctrlKey) {
+
+                /* Selection with keyboard */
+                if(e.keyCode == 40) {
+                    e.preventDefault();
+                    if(!this.selection.defined) {
+                        this.selection.create(this.cursor);
+                    }
+                    this.cursor.lineDown(true);
+                    this.selection.move(this.cursor);                    
+                    this.cursor.focus();
+                    return;
+                }
+
+                if(e.keyCode == 38) {
+                    e.preventDefault();
+                    if(!this.selection.defined) {
+                        this.selection.create(this.cursor);
+                    }
+                    this.cursor.lineUp(true);
+                    this.selection.move(this.cursor);  
+                    this.cursor.focus();
+                    return;
+                }
+            
+                if(e.keyCode == 37) {
+                    e.preventDefault();
+                    if(!this.selection.defined) {
+                        this.selection.create(this.cursor);
+                    }
+                    this.cursor.left(true);
+                    this.selection.move(this.cursor);
+                    this.cursor.focus();
+                    return;
+                }
+            
+                if(e.keyCode == 39) {
+                    e.preventDefault();
+                    if(!this.selection.defined) {
+                        this.selection.create(this.cursor);
+                    }
+                    this.cursor.right(true);
+                    this.selection.move(this.cursor);
+                    this.cursor.focus();
+                    return;
+                }
+
                 return;
             }
             this.cursor.show = true;
