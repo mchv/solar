@@ -51,7 +51,7 @@ Solar.History = Solar.Utils.makeClass({
        if(lastCommand.type == 'r') {
            this.editor.model.replace(lastCommand.from, lastCommand.from + lastCommand.oldTxt.length, lastCommand.newTxt, true);
            this.editor.cursor.toPosition(lastCommand.from);
-           this.editor.selection = null;  
+           this.editor.selection.empty();  
        }
        this.editor.cursor.focus();
        this.editor.paint();

@@ -1,36 +1,75 @@
 Solar.Selection = Solar.Utils.makeClass({
 
 
-	defined: false;
+	defined: false,
 	from: null,
 	to:  null,
     anchor: null,
 
-    update: function(cursor, model) {
+
+    constructor: function() {
+
+    },
+
+    create: function(cursor) {
+    	this.defined = true;
+     	this.anchor = cursor.getPosition();
+     },
+
+    all: function(model) {
+		this.defined = true;
+		this.from = 0;
+		this.to = model.content.length;
+		this.achor = 0;
+	},
+
+    update: function(cursor, model, pattern) {
      
-     	this.defined = true;
+    	var matching = pattern || /\w/;
 
      	var txt = model.lines[cursor.line-1].content;
         var c = cursor.column;
-        while(txt.charAt(c).match(/\w/) && c > -1) {
+        while(txt.charAt(c).match(matching) && c > -1) {
             c--;
         }
         c++;
  
-        this.anchor = cursor.getPosition();
-        this.from = model.lines[cursor.line-1].offset;
+        this.create(cursor);
+        this.from = c + model.lines[cursor.line-1].offset;
         this.to = null;
         
-        c = this.cursor.column + 1;
-        while(txt.charAt(c).match(/\w/) && c < txt.length) {
+        c = cursor.column + 1;
+        while(txt.charAt(c).match(matching) && c < txt.length) {
             c++;
         }
         this.to = c + model.lines[cursor.line-1].offset;
-     },
+    },
 
-    create: function(cursor) {
-     	this.anchor = cursor.getPosition();
-     }
+	move: function(cursor) {
+		var newBound = cursor.getPosition();
+		if(newBound < this.anchor && this.from != newBound) {
+                    this.from = newBound;
+                    this.to = this.anchor;
+                    return true;
+         }
+         if(newBound > this.anchor && this.to != newBound) {
+                    this.from = this.anchor;
+                    this.to = newBound;
+                    return true;
+         }                            
+        if(newBound == this.anchor && this.from != null) {
+                    this.from = null;
+                    this.to = null;
+                    return true;
+        }
+        return false;
+	},
+
+	clear: function() {
+		if(this.defined && (this.from == null || this.to == null)) {
+			this.empty();
+		}
+	},
 
 	empty: function() {
 		this.defined = false;
@@ -38,31 +77,5 @@ Solar.Selection = Solar.Utils.makeClass({
 		this.to = null;
 		this.anchor = null;
 	},
-
-
-	pif: function() {
-		if(newBound < this.selection.anchor && this.selection.from != newBound) {
-                    this.selection.from = newBound;
-                    this.selection.to = this.selection.anchor;
-                    return true;
-         }
-         if(newBound > this.selection.anchor && this.selection.to != newBound) {
-                    this.selection.from = this.selection.anchor;
-                    this.selection.to = newBound;
-                    return true;
-         }                            
-        if(newBound == this.selection.anchor && this.selection.from != null) {
-                    this.selection.from = null;
-                    this.selection.to = null;
-                    return true;
-        }
-        return false;
-	},
-
-	plop: function() {
-		if(defined && (thisfrom == null || this.to == null)) {
-			this.empty();
-		}
-	}
 
 });

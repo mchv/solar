@@ -20,7 +20,7 @@ Solar.Clipboard = Solar.Utils.makeClass({
             this.copyToClipboard(data);
             this.editor.model.replace(this.editor.selection.from, this.editor.selection.to, '');
             this.editor.cursor.toPosition(this.editor.selection.from);
-            this.editor.selection = null;
+            this.editor.selection.empty();
             this.editor.cursor.focus();
             this.editor.paint();
         }
@@ -38,10 +38,10 @@ Solar.Clipboard = Solar.Utils.makeClass({
         setTimeout(Solar.Utils.bind(function() {
             var data = this.clipboard.value;
             if(data) {
-                if(this.editor.selection) {
+                if(this.editor.selection.defined) {
                     this.editor.model.replace(this.editor.selection.from, this.editor.selection.to, data);
                     this.editor.cursor.toPosition(this.editor.selection.from + data.length);
-                    this.editor.selection = null;
+                    this.editor.selection.empty();
                 } else {
                     this.editor.model.insert(this.editor.cursor.getPosition(), data);
                     this.editor.cursor.toPosition(this.editor.cursor.getPosition() + data.length);                         
@@ -59,7 +59,7 @@ Solar.Clipboard = Solar.Utils.makeClass({
     },
     
     selected: function() {
-        if(!this.editor.selection) {
+        if(!this.editor.selection.defined) {
             return '';
         }
         return this.editor.model.content.substring(this.editor.selection.from, this.editor.selection.to);

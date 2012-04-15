@@ -38,6 +38,7 @@ Solar.Editor = Solar.Utils.makeClass({
         this.cursor = new Solar.Cursor(this);
         this.history = new Solar.History(this);
         this.clipboard = new Solar.Clipboard(this);
+        this.selection = new Solar.Selection();
         
         // Gecko detection
         this.gecko = (document.getBoxObjectFor == undefined) ? false : true;
@@ -149,7 +150,7 @@ Solar.Editor = Solar.Utils.makeClass({
         } 
         // Text click
         else {
-            this.selection = null;
+            this.selection.empty();
             this.bp = true;   
             if(e.target == this.el) {
                 this.cursor.fromPointer(this.translate(e));
@@ -160,23 +161,8 @@ Solar.Editor = Solar.Utils.makeClass({
         }                         
     },
     
-    onDblclick: function(e) {
-        var txt = this.model.lines[this.cursor.line-1].content;
-        var c = this.cursor.column;
-        while(txt.charAt(c).match(/\w/) && c > -1) {
-            c--;
-        }
-        c++;
-        this.selection = {
-            anchor: this.cursor.getPosition(),
-            from: c + this.model.lines[this.cursor.line-1].offset,
-            to: null
-        }
-        c = this.cursor.column + 1;
-        while(txt.charAt(c).match(/\w/) && c < txt.length) {
-            c++;
-        }
-        this.selection.to = c + this.model.lines[this.cursor.line-1].offset;
+    onDblclick: function(e) {        
+        this.selection.update(this.cursor, this.model);
         this.paint();
     },
     
@@ -186,10 +172,7 @@ Solar.Editor = Solar.Utils.makeClass({
         this.scrollBase = null;
         clearTimeout(this.autoscroller);
         // No select
-        $('#preview').css('-webkit-user-select', '');
-        if(this.selection && (this.selection.from == null || this.selection.to == null)) {
-            this.selection = null;
-        }
+        this.selection.clear();
     },
     
     onMousemove: function(e) {
@@ -210,28 +193,11 @@ Solar.Editor = Solar.Utils.makeClass({
         }
         // A selection ?
         if(this.bp) {
-            if(!this.selection) {
-                this.selection = {
-                    anchor: this.cursor.getPosition(),
-                    from: null,
-                    to: null
-                }
+            if(!this.selection.defined) {
+                this.selection.create(this.cursor);
             } else {
                 this.cursor.fromPointer(this.translate(e));
-                var newBound = this.cursor.getPosition();
-                if(newBound < this.selection.anchor && this.selection.from != newBound) {
-                    this.selection.from = newBound;
-                    this.selection.to = this.selection.anchor;
-                    this.paint();
-                }
-                if(newBound > this.selection.anchor && this.selection.to != newBound) {
-                    this.selection.from = this.selection.anchor;
-                    this.selection.to = newBound;
-                    this.paint();
-                }                            
-                if(newBound == this.selection.anchor && this.selection.from != null) {
-                    this.selection.from = null;
-                    this.selection.to = null;
+                if(this.selection.move(this.cursor)) {
                     this.paint();
                 }
             }
@@ -294,11 +260,7 @@ Solar.Editor = Solar.Utils.makeClass({
                 /* a */
                 if(e.charCode == 97) {
                     e.preventDefault();
-                    this.selection = {
-                        anchor: 0,
-                        from: 0,
-                        to: this.model.content.length
-                    }
+                    this.selection.all(this.model);
                     this.paint();
                 }
                 /* z */
@@ -345,10 +307,10 @@ Solar.Editor = Solar.Utils.makeClass({
             // CHARS
             var c = String.fromCharCode(e.charCode);
             e.preventDefault();
-            if(this.selection) {
+            if(this.selection.defined) {
                 this.model.replace(this.selection.from, this.selection.to, c);
                 this.cursor.toPosition(this.selection.from + 1);
-                this.selection = null;
+                this.selection.empty();
             } else {
                 this.model.insert(position, c);
                 this.cursor.toPosition(position + 1);                         
@@ -394,10 +356,10 @@ Solar.Editor = Solar.Utils.makeClass({
             /* ENTER */
             if(e.keyCode == 13) {
                 e.preventDefault();
-                if(this.selection) {
+                if(this.selection.defined) {
                     this.model.replace(this.selection.from, this.selection.to, '\n');
                     this.cursor.toPosition(this.selection.from + 1);
-                    this.selection = null;
+                    this.selection.empty();
                 } else {
                     this.model.lineBreak(position);
                     this.cursor.toPosition(position+1);                                
@@ -409,10 +371,10 @@ Solar.Editor = Solar.Utils.makeClass({
             /* BACKSPACE */
             if(e.keyCode == 8) {
                 e.preventDefault();
-                if(this.selection) {
+                if(this.selection.defined) {
                     this.model.replace(this.selection.from, this.selection.to, '');
                     this.cursor.toPosition(this.selection.from);
-                    this.selection = null;
+                    this.selection.empty();
                 } else {
                     this.model.deleteLeft(position);
                     this.cursor.toPosition(position - 1);
@@ -424,10 +386,10 @@ Solar.Editor = Solar.Utils.makeClass({
             /* TAB */
             if(e.keyCode == 9) {
                 e.preventDefault();
-                if(this.selection) {
+                if(this.selection.defined) {
                     this.model.replace(this.selection.from, this.selection.to, '    ');
                     this.cursor.toPosition(this.selection.from + 4);
-                    this.selection = null;
+                    this.selection.empty();
                 } else {
                     this.model.insert(position, '    ');
                     this.cursor.toPosition(position + 4);                            
@@ -489,7 +451,7 @@ Solar.Editor = Solar.Utils.makeClass({
             } else {
                 this.ctx.fillStyle = 'rgba(255,255,255,.2)';                
             }
-            if(!this.selection) {               
+            if(!this.selection.defined) {               
                 if(this.cursor.isVisible()) {  
                     this.ctx.fillRect(this.gutterWidth + 1, (this.cursor.line - this.first_line) * this.lineHeight + this.paddingTop, this.width - this.gutterWidth, this.lineHeight);
                 }
@@ -531,7 +493,7 @@ Solar.Editor = Solar.Utils.makeClass({
             if(i > this.model.lines.length) {
                 break;
             }
-            if(this.hasFocus && !this.selection && this.model.lines[i-1].line == this.model.lines[this.cursor.line-1].line) {
+            if(this.hasFocus && !this.selection.defined && this.model.lines[i-1].line == this.model.lines[this.cursor.line-1].line) {
                  this.ctx.fillStyle = '#000000'; 
             } else {
                 this.ctx.fillStyle = '#888888';                            
@@ -607,7 +569,7 @@ Solar.Editor = Solar.Utils.makeClass({
     },
 
     paintCursor: function() {
-        if(this.hasFocus && this.cursor.show && !this.selection && this.cursor.isVisible()) {
+        if(this.hasFocus && this.cursor.show && !this.selection.defined && this.cursor.isVisible()) {
             this.ctx.fillStyle = '#FFF';
             this.ctx.fillRect(this.gutterWidth + this.paddingLeft + this.cursor.column * this.charWidth, this.paddingTop + ((this.cursor.line - this.first_line) * this.lineHeight), 1, this.lineHeight);
         }
