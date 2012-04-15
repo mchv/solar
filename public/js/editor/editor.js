@@ -689,6 +689,12 @@ Solar.Editor = Solar.Utils.makeClass({
     close: function() {
         var closeLink = $('a.close').attr('href');
         window.location = closeLink;
+    },
+
+    help: function() {
+        if (this.createParser().help) {
+
+        }
     }
     
 });
