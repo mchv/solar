@@ -47,7 +47,8 @@ Solar.Clipboard = Solar.Utils.makeClass({
                     this.editor.cursor.toPosition(this.editor.cursor.getPosition() + data.length);                         
                 }
                 this.editor.cursor.focus();
-                this.editor.paint();    
+                this.editor.paint();
+                this.editor.compile();
             }
         }, this), 0);                    
     },

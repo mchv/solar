@@ -304,10 +304,12 @@ Solar.Editor = Solar.Utils.makeClass({
                 /* z */
                 if(e.charCode == 122) {
                     this.history.undo();
+                    this.compile();
                 }
                 /* y */
                 if(e.charCode == 121) {
                     this.history.redo();
+                    this.compile();
                 }
                 /* x */
                 if(e.charCode == 120) {
@@ -316,6 +318,7 @@ Solar.Editor = Solar.Utils.makeClass({
                 /* v */
                 if(e.charCode == 118) {
                     this.clipboard.paste();
+                    /* compilation is called in the paste action */
                 }
                 /* c */
                 if(e.charCode == 99) {
