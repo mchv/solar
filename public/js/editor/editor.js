@@ -564,7 +564,7 @@ Solar.Editor = Solar.Utils.makeClass({
     paintContent: function() {
         
 
-        var parser = this.getParser();
+        var parser = this.createParser();
         var x = 0, y = 1;
         var tokens = parser.tokens();
         for (var t=0; t<tokens.length; t++) {    
@@ -638,7 +638,7 @@ Solar.Editor = Solar.Utils.makeClass({
     },
 
 
-    getParser: function() {
+    createParser: function() {
             var end_line = this.first_line + this.lines - 1;
             if (this.path.match(/\.java$/))
                 return new Solar.Java.Parser(this.model, this.first_line, end_line);
