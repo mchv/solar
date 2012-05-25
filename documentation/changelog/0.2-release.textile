@@ -10,6 +10,8 @@ h3. CSS files edition
 
 Ability to edit Java files with syntax highlighting and live documentation (require a connection).
 
+!http://github.com/mchv/solar/raw/master/documentation/images/0.2-css_editor.png!
+
 h2. Bugs correction
 
 h3. Compilation on undo, redo and paste actions
