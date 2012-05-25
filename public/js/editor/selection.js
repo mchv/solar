@@ -23,26 +23,29 @@ Solar.Selection = Solar.Utils.makeClass({
 		this.achor = 0;
 	},
 
-    update: function(cursor, model, pattern) {
+    update: function(cursor, model, selector) {
      
-    	var matching = pattern || /\w/;
+    	var pattern = selector || /^[a-z]+$/;
 
      	var txt = model.lines[cursor.line-1].content;
         var c = cursor.column;
-        while(txt.charAt(c).match(matching) && c > -1) {
-            c--;
+
+        var f = c;
+        var t = c+1;
+
+        while(pattern.test(txt.substring(f, t)) && f > -1) {
+            f--;
         }
-        c++;
- 
+        f++;
+
+        while(pattern.test(txt.substring(f, t)) && t < txt.length) {
+            t++;
+        }
+        t--;
+
         this.create(cursor);
-        this.from = c + model.lines[cursor.line-1].offset;
-        this.to = null;
-        
-        c = cursor.column + 1;
-        while(txt.charAt(c).match(matching) && c < txt.length) {
-            c++;
-        }
-        this.to = c + model.lines[cursor.line-1].offset;
+        this.from = f + model.lines[cursor.line-1].offset;
+        this.to = t + model.lines[cursor.line-1].offset;
     },
 
 	move: function(cursor) {
