@@ -32,6 +32,7 @@
 
         <script src="@{'/public/js/editor/css/parser.js'}"></script>
         <script src="@{'/public/js/editor/css/theme.js'}"></script>
+        <script src="@{'/public/js/editor/css/help.js'}"></script>
 
         <script src="@{'/public/js/editor/router/parser.js'}"></script>
         <script src="@{'/public/js/editor/router/theme.js'}"></script>
@@ -58,9 +59,6 @@
     <body>
         <div id="header">
                 <img class="logo" src="@{'/public/images/Solar.png'}" height="30"></img>
-        </div>
-        <div id="content">
-                <div id="file">
 
                          %{
                                 segments = path.split("/");
@@ -94,8 +92,15 @@
                                 Close</a>
                                 </li>
                         </ul> 
-                        <canvas id="editor" width="800" height="500">${content}</canvas>
+
+        </div>
+        <!--<div id="content">-->
+                <div id="file">
+                        <canvas id="editor" width="600" height="600">${content}</canvas>
                 </div>
+                <div id="help">
+                </div>
+           <!--</div>-->
         </div>
 </body>
 </html>

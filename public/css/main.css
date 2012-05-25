@@ -1,6 +1,7 @@
-#body {
+body {
 	font-family:Helvetica, arial;
 	font-size:12px;
+	background-color:rgb(255, 255, 255);
 }
 
 a {
@@ -10,6 +11,9 @@ a {
 	font-size:12px;
 }
 
+canvas {
+	display: block;
+}
 
 #header {
 	background-color:rgb(250, 250, 250);
@@ -104,8 +108,7 @@ a {
 	padding:3px;
 	margin-bottom:5px;
 	width: 920px;
-	margin-right: 100px
-	;
+	margin-right: 100px;
 }
 
 #list table {
@@ -149,23 +152,44 @@ a {
 }
 
 #file {
+	padding-top: 10px;
 	padding-left: 20px;
 	font-family:Helvetica, arial;
 	font-size:13px;
+	display:inline-block;
+	float:left;
 }
 
-#file ul.buttons {
+#help {
+	width: 600px;
+	display:inline-block;
+	float:left;
+	padding-left : 10px;
+	opacity:1;
+}
+
+/* mozilla stuffs to hide */
+#pageText.pageText p {
+	display: none;
+} 
+
+.loading{
+	opacity:0.5;
+	background:url('/public/images/loader.gif') no-repeat 10px 10px;
+}
+
+#header ul.buttons {
 	border:none;
 	display: inline-block;
 	margin: 3px;
 }
 
-#file ul.buttons li {
+#header ul.buttons li {
 	list-style-type:none;
 	display: inline-block;
 }
 
-#file a.button {
+#header a.button {
 	display:block;
 	cursor:default;
 	text-decoration:none;
@@ -183,10 +207,6 @@ a {
 	margin: 0pt 0pt 0pt 5px;
 }
 
-#file a.button.inactive {
+#header a.button.inactive {
 	color:rgb(220, 220, 220);
-}
-
-canvas {
-	display: block;
 }

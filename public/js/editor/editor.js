@@ -11,7 +11,7 @@ Solar.Editor = Solar.Utils.makeClass({
     gutterWidth: 40,
     paddingTop: 5,
     paddingLeft: 5,
-    font: '9pt Monaco, Lucida Console, monospace',
+    font: '8pt Monaco, Lucida Console, monospace',
     
     hasFocus: false,
     selection: null,
@@ -161,8 +161,25 @@ Solar.Editor = Solar.Utils.makeClass({
         }                         
     },
     
-    onDblclick: function(e) {        
-        this.selection.update(this.cursor, this.model);
+    onDblclick: function(e) {
+
+        e.preventDefault()
+
+        var parser = this.createParser()
+
+        if (parser.help) {
+            this.selection.update(this.cursor, this.model, parser.help.selector())
+
+            var page = parser.help.page()
+            var url = page.url(this.model.content.substring(this.selection.from, this.selection.to))
+
+            $('#help').css("opacity",0.2).addClass('loading').load(url + ' #' + page.div, function() {
+                $('#help').removeClass('loading').css("opacity",1);
+            });
+
+        } else {
+            this.selection.update(this.cursor, this.model);
+        }
         this.paint();
     },
     
@@ -545,17 +562,13 @@ Solar.Editor = Solar.Utils.makeClass({
                 this.ctx.fillStyle = '#888888';                            
             }
             var ln = '';
-            if(false) {
-                // debug
-                ln = i+'';
+            if(this.model.lines[i-1].line == previousLine) {
+                ln = '\u00B7';
             } else {
-                if(this.model.lines[i-1].line == previousLine) {
-                    ln = '\u00B7';
-                } else {
-                    previousLine = (this.model.lines[i-1].line);
-                    ln = previousLine + '';
-                }
+                previousLine = (this.model.lines[i-1].line);
+                ln = previousLine + '';
             }
+            
             var w = ln.length * 8;
             this.ctx.fillText(ln, this.gutterWidth - this.paddingLeft - w, rl++ * this.lineHeight + this.paddingTop - 4);
         }
@@ -577,9 +590,9 @@ Solar.Editor = Solar.Utils.makeClass({
                     this.ctx.fillStyle = '#FFF';                            
                 }
                 if(style && style.fontStyle) {
-                    this.ctx.font = style.fontStyle + ' ' + '12px Monaco, Lucida Console, monospace'; 
+                    this.ctx.font = style.fontStyle + ' ' + '8pt Monaco, Lucida Console, monospace'; 
                 } else {
-                    this.ctx.font = '12px Monaco, Lucida Console, monospace';                         
+                    this.ctx.font = '8pt Monaco, Lucida Console, monospace';                         
                 }
 
                 if(token.text.indexOf('\n') > -1 || token.text.indexOf('\r') > -1) {
