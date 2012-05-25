@@ -1,0 +1,23 @@
+h1. Solar 0.2 Changelog 
+
+h2. New features
+
+h3. Selection with keyboard
+
+Ability to update the selection with arrows keys when CTRL key is pressed.
+
+h3. CSS files edition
+
+Ability to edit Java files with syntax highlighting and live documentation (require a connection).
+
+h2. Bugs correction
+
+h3. Compilation on undo, redo and paste actions
+
+Previously the compilation was not launched after undo, redo and paste actions.
+This is now fixed.
+
+h2. Edition of empty files
+
+Previously the edition of empty files was not working.
+This is now fixed.
