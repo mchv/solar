@@ -19,7 +19,7 @@ h3. Compilation on undo, redo and paste actions
 Previously the compilation was not launched after undo, redo and paste actions.
 This is now fixed.
 
-h2. Edition of empty files
+h3. Edition of empty files
 
 Previously the edition of empty files was not working.
 This is now fixed.
